@@ -1,5 +1,5 @@
 # this is for configuration that goes directly into the conf file.
-# use env variable COMMUNITY=1 if you want a community server (make sure to set conf PublicIP and PublicPort)
+# use env variable COMMUNITY_SERVER=1 if you want a community server (make sure to set conf PublicIP and PublicPort)
 #
 [Server]
 ServerPlayerMaxNum = 42

@@ -26,6 +26,7 @@ echo "Running proxy from 8211 to ${INTERNAL_SERVER_PORT}"
 
 # run server
 if [ "${COMMUNITY_SERVER}" = "1" ]; then
+    echo "Exposing server as public community server!"
 	./PalServer.sh -port=${INTERNAL_SERVER_PORT} -useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS -publiclobby
 else
 	./PalServer.sh -port=${INTERNAL_SERVER_PORT} -useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS
