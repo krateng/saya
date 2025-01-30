@@ -1,0 +1,14 @@
+# this is for configuration that goes directly into the conf file.
+# use env variable COMMUNITY=1 if you want a community server (make sure to set conf PublicIP and PublicPort)
+#
+[Server]
+ServerPlayerMaxNum = 42
+ServerName = "PartyServer 5000"
+ServerDescription = "Kuck mal hier. Sehr sehr geiler Server. Toll. Oh, eine Hose. Die ist aber weich. Sehr geil. Super."
+ServerPassword = "correct-horse-battery-staple"
+PublicIP = "256.257.258.259"
+PublicPort = 8211
+RCONEnabled = true
+RCONPort = 25575
+AdminPassword = "incorrect-horse-battery-staple"
+AllowConnectPlatform = "Steam"

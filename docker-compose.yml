@@ -1,0 +1,11 @@
+services:
+  palserver:
+    build:
+      context: .
+      dockerfile: ./DockerfileLSIO
+    ports:
+    - "8211:8211/udp"
+    - "25575:25575"
+    volumes:
+    - ./example_data/save:/home/steam/palworld/Pal/Saved/SaveGames
+    - ./example_data/config:/config
