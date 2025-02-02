@@ -1,4 +1,24 @@
-FROM lsiobase/ubuntu:jammy-version-c295ed29
+FROM rust:1.83-alpine3.21 AS builder
+
+WORKDIR /source
+
+# system requirements
+RUN apk add --no-cache \
+    build-base \
+    curl \
+    libressl-dev \
+    pkgconfig \
+    git \
+    bash
+
+ENV CARGO_TARGET_DIR=/target
+
+COPY Cargo.toml Cargo.lock ./
+COPY src/ ./src
+RUN cargo build --release
+
+
+FROM lsiobase/ubuntu:jammy-version-c295ed29 AS main
 
 # first pretty much do what cm2network/steamcmd does
 ARG PUID=1000
@@ -54,16 +74,23 @@ RUN ./steamcmd.sh +quit
 
 
 # dev
-#ADD --chown=$USER ./serverfiles $PALSERVERDIR
+ADD --chown=$USER ./serverfiles $PALSERVERDIR
 # prod
-RUN mkdir $PALSERVERDIR && chown $USER $PALSERVERDIR && chmod -R 755 $PALSERVERDIR
-RUN ./steamcmd.sh +force_install_dir $PALSERVERDIR +login anonymous +app_update 2394010 validate +quit
+#RUN mkdir $PALSERVERDIR && chown $USER $PALSERVERDIR && chmod -R 755 $PALSERVERDIR
+#RUN ./steamcmd.sh +force_install_dir $PALSERVERDIR +login anonymous +app_update 2394010 validate +quit
 
 WORKDIR $PALSERVERDIR
+
+# this replaces the PalServer.sh pre work
+RUN cp $PALSERVERDIR/linux64/steamclient.so $PALSERVERDIR/Pal/Binaries/Linux/steamclient.so
+RUN chmod +x $PALSERVERDIR/Pal/Binaries/Linux/PalServer-Linux-Shipping
+
 RUN mkdir -p $PALSERVERDIR/Pal/Saved/Config/LinuxServer && chown $USER $PALSERVERDIR/Pal/Saved/Config/LinuxServer
 
-ADD --chown=$USER --chmod=755 ./init.sh $PALSERVERDIR/init.sh
-ADD --chown=$USER --chmod=755 ./generate_config.py $PALSERVERDIR/generate_config.py
+ADD --chown=$USER --chmod=755 ./scripts/init.sh $PALSERVERDIR/init.sh
+ADD --chown=$USER --chmod=755 ./scripts/generate_config.py $PALSERVERDIR/generate_config.py
+
+COPY --chown=$USER --from=builder --chmod=755 /target/release/saya $PALSERVERDIR/saya
 
 # server
 EXPOSE 8211
