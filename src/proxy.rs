@@ -10,16 +10,16 @@ use crate::server;
 
 
 const FULL_REQUEST_LOG: bool = false;
-pub const BUFFER_SIZE: usize = 65535;
-pub const TIMEOUT: Duration = Duration::from_secs(200);
-pub const CHECK_INTERVAL: Duration = Duration::from_secs(30);
+const BUFFER_SIZE: usize = 65535;
+const TIMEOUT: Duration = Duration::from_secs(200);
+const CHECK_INTERVAL: Duration = Duration::from_secs(30);
 
 fn log(line: &str) {
     println!("[{}] {}", "SAYA PROXY", line);
 }
 fn proxylog(origin: SocketAddr, in_interface: &UdpSocket, out_interface: &UdpSocket, target: SocketAddr, size: usize) {
     if FULL_REQUEST_LOG {
-        println!("[SAYA PROXY OP] {:?} -> [{:?} [[ {} bits ]] {:?}] -> {:?}", origin, in_interface.local_addr().unwrap(), size, out_interface.local_addr().unwrap(), target);
+        println!("[SAYA PROXY OP] {:?} -> [{:?} [[ {} byte ]] {:?}] -> {:?}", origin, in_interface.local_addr().unwrap(), size, out_interface.local_addr().unwrap(), target);
     }
 }
 
@@ -104,7 +104,7 @@ pub fn run_proxy(listen_addr: SocketAddrV6, forward_addr: SocketAddrV4) {
                                 Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {
                                     thread::sleep(Duration::from_millis(100));
                                 },
-                                Err(e) => {
+                                Err(_e) => {
                                 }
                             }
                         }
@@ -121,7 +121,7 @@ pub fn run_proxy(listen_addr: SocketAddrV6, forward_addr: SocketAddrV4) {
             Err(ref e) if e.kind() == std::io::ErrorKind::WouldBlock => {
                 thread::sleep(Duration::from_millis(100));
             },
-            Err(e) => {
+            Err(_e) => {
             }
         }
     }

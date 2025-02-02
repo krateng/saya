@@ -1,11 +1,12 @@
 mod server;
 mod proxy;
+mod config;
 
 use std::{
     env, net::{SocketAddrV6, SocketAddrV4, Ipv6Addr, Ipv4Addr}
 };
 use std::fs::OpenOptions;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 fn main() {
 
@@ -15,6 +16,9 @@ fn main() {
         .expect("Invalid port number");
 
     check_requirements();
+
+    config::generate_settings();
+    config::set_world();
 
     let listen_addr = SocketAddrV6::new(Ipv6Addr::UNSPECIFIED, 8211, 0, 0);
     let forward_addr = SocketAddrV4::new(Ipv4Addr::LOCALHOST, internal_port);

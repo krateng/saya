@@ -99,4 +99,4 @@ EXPOSE 25575
 
 # ignore s6 overlay stuff for now, do it manual
 
-ENTRYPOINT ["./init.sh"]
+ENTRYPOINT ["./saya"]
