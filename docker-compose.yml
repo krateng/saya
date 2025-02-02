@@ -2,7 +2,7 @@ services:
   palserver:
     build:
       context: .
-      dockerfile: ./DockerfileLSIO
+      dockerfile: Dockerfile
     ports:
     - "8211:8211/udp"
     - "25575:25575"
