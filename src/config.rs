@@ -1,15 +1,11 @@
 use toml::Table;
 use std::fs;
 use std::path::Path;
+use std::process::Command;
 
-const WORLDSETTINGS_PATH: &str = "./Pal/Saved/Config/LinuxServer/PalWorldSettings.ini";
-const USERSETTINGS_PATH: &str = "./Pal/Saved/Config/LinuxServer/GameUserSettings.ini";
-const WORLDS_FOLDER: &str = "Pal/Saved/SaveGames/0";
-const SAYA_SETTINGS_PATH: &str = "/config/palworld_conf.toml";
-
-pub fn generate_settings() {
+pub fn generate_settings(saya_conf_file: &Path, palworld_worldsettings_file: &Path) {
     println!("Creating world settings file...");
-    let config_file_content = fs::read_to_string(SAYA_SETTINGS_PATH).unwrap();
+    let config_file_content = fs::read_to_string(saya_conf_file).unwrap();
     let table = config_file_content.parse::<Table>().unwrap();
 
     const ERROR_MSG: &str = "TOML file invalid!";
@@ -23,12 +19,12 @@ pub fn generate_settings() {
 
     let settings_file_content = format!("[/Script/Pal.PalGameWorldSettings]\nOptionSettings=({})\n", settings_string);
 
-    fs::write(WORLDSETTINGS_PATH, settings_file_content).unwrap();
+    fs::write(palworld_worldsettings_file, settings_file_content).unwrap();
 }
 
-pub fn set_world() {
+pub fn set_world(worlds_folder: &Path, palworld_usersettings_file: &Path) {
     println!("Creating user settings file...");
-    let worlds = list_folders(WORLDS_FOLDER).unwrap();
+    let worlds = list_folders(worlds_folder).unwrap();
     let active_world = match worlds.len() {
         0 => {
             println!("No saved worlds, this is a new server installation!");
@@ -46,13 +42,19 @@ pub fn set_world() {
 
     if let Some(world) = active_world {
         let settings_file_content = format!("[/Script/Pal.PalGameLocalSettings]\nDedicatedServerName={}\n", world);
-        fs::write(USERSETTINGS_PATH, settings_file_content).unwrap();
+        fs::write(palworld_usersettings_file, settings_file_content).unwrap();
     }
-
-
-
 }
 
+pub fn init_script(scriptfile: &Path) -> bool {
+    if !scriptfile.exists() || !scriptfile.is_file() {
+        println!("Could not find init script {:?}", scriptfile);
+        return false;
+    }
+    println!("\n\nRunning custom init script...\n\n");
+    Command::new("bash").arg(scriptfile).spawn().expect("Init script failed!");
+    return true;
+}
 
 fn list_folders<P: AsRef<Path>>(path: P) -> std::io::Result<Vec<String>> {
     let mut folders = Vec::new();

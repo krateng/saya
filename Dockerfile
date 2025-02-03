@@ -74,10 +74,10 @@ RUN ./steamcmd.sh +quit
 
 
 # dev
-ADD --chown=$USER ./serverfiles $PALSERVERDIR
+#ADD --chown=$USER ./serverfiles $PALSERVERDIR
 # prod
-#RUN mkdir $PALSERVERDIR && chown $USER $PALSERVERDIR && chmod -R 755 $PALSERVERDIR
-#RUN ./steamcmd.sh +force_install_dir $PALSERVERDIR +login anonymous +app_update 2394010 validate +quit
+RUN mkdir $PALSERVERDIR && chown $USER $PALSERVERDIR && chmod -R 755 $PALSERVERDIR
+RUN ./steamcmd.sh +force_install_dir $PALSERVERDIR +login anonymous +app_update 2394010 validate +quit
 
 WORKDIR $PALSERVERDIR
 
@@ -86,9 +86,6 @@ RUN cp $PALSERVERDIR/linux64/steamclient.so $PALSERVERDIR/Pal/Binaries/Linux/ste
 RUN chmod +x $PALSERVERDIR/Pal/Binaries/Linux/PalServer-Linux-Shipping
 
 RUN mkdir -p $PALSERVERDIR/Pal/Saved/Config/LinuxServer && chown $USER $PALSERVERDIR/Pal/Saved/Config/LinuxServer
-
-ADD --chown=$USER --chmod=755 ./scripts/init.sh $PALSERVERDIR/init.sh
-ADD --chown=$USER --chmod=755 ./scripts/generate_config.py $PALSERVERDIR/generate_config.py
 
 COPY --chown=$USER --from=builder --chmod=755 /target/release/saya $PALSERVERDIR/saya
 

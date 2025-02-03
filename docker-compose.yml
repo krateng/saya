@@ -7,5 +7,5 @@ services:
     - "8211:8211/udp"
     - "25575:25575"
     volumes:
-    - ./example_data/save:/home/steam/palworld/Pal/Saved/SaveGames
+    - ./example_data/save:/home/steam/palworld/Pal/Saved/SaveGames/0
     - ./example_data/config:/config

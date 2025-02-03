@@ -1,7 +1,8 @@
 use std::env;
+use std::path::PathBuf;
 use std::process::{Child, Command};
 
-pub fn start_server(port: u16) -> Child {
+pub fn start_server(server_exec: &PathBuf, port: u16) -> Child {
     let community_server_var: u8 = env::var("COMMUNITY_SERVER")
         .expect("Missing environment variable COMMUNITY_SERVER")
         .parse::<u8>()
@@ -11,7 +12,7 @@ pub fn start_server(port: u16) -> Child {
         1 => true,
         _ => panic!("COMMUNITY_SERVER must be 0 or 1")
     };
-    let mut cmd = Command::new("./Pal/Binaries/Linux/PalServer-Linux-Shipping");
+    let mut cmd = Command::new(server_exec);
     cmd
         .arg(format!("-port={}", port))
         .arg("-useperfthreads")

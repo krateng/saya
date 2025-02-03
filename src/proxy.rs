@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::net::{SocketAddr, SocketAddrV4, SocketAddrV6, UdpSocket};
+use std::path::PathBuf;
 use std::process::Child;
 use std::sync::{Arc, Mutex};
 use std::thread;
@@ -24,7 +25,7 @@ fn proxylog(origin: SocketAddr, in_interface: &UdpSocket, out_interface: &UdpSoc
 }
 
 
-pub fn run_proxy(listen_addr: SocketAddrV6, forward_addr: SocketAddrV4) {
+pub fn run_proxy(listen_addr: SocketAddrV6, forward_addr: SocketAddrV4, server_exec: &PathBuf) {
     let receive_socket = UdpSocket::bind(SocketAddr::V6(listen_addr))
         .expect("Failed to bind UDP socket");
     receive_socket.set_nonblocking(true)
@@ -77,7 +78,7 @@ pub fn run_proxy(listen_addr: SocketAddrV6, forward_addr: SocketAddrV4) {
                 let mut process_lock = server_process.lock().unwrap();
                 if process_lock.is_none() {
                     log("Received request, starting server...");
-                    *process_lock = Some(server::start_server(forward_addr.port()));
+                    *process_lock = Some(server::start_server(server_exec, forward_addr.port()));
                     thread::sleep(Duration::from_secs(6));
                     log("Continuing now!");
                 }
