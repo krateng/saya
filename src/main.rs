@@ -17,7 +17,7 @@ fn main() {
         .expect("Invalid port number");
 
     let pal_server_dir: PathBuf = Path::new(&env::var("PALSERVERDIR").expect("Missing environment variable PALSERVERDIR")).to_path_buf();
-    let pal_settings_dir: PathBuf = pal_server_dir.join("./Pal/Saved/Config");
+    let pal_settings_dir: PathBuf = pal_server_dir.join("./Pal/Saved/Config/LinuxServer");
     let pal_user_settings_file: PathBuf = pal_settings_dir.join("./GameUserSettings.ini");
     let pal_world_settings_file: PathBuf = pal_settings_dir.join("./PalWorldSettings.ini");
     let pal_worlds_folder: PathBuf = pal_server_dir.join("./Pal/Saved/SaveGames/0");

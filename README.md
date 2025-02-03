@@ -1,5 +1,6 @@
 Custom Palworld server wrapper that
 - allows better configuration with a toml file
+- refuses to run if it can't save your data
 - shuts down when nobody is connected and starts up again when someone wants to join
 
 Mount:

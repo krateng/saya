@@ -1,5 +1,5 @@
 services:
-  palserver:
+  saya-palserver:
     build:
       context: .
       dockerfile: Dockerfile
