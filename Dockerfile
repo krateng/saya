@@ -32,6 +32,8 @@ ENV PALSERVERDIR=$HOME/palworld
 ENV INTERNAL_SERVER_PORT=8215
 ENV COMMUNITY_SERVER=0
 
+ENV CARGO_TERM_COLOR=always
+
 RUN apt update && apt install -y --no-install-recommends --no-install-suggests \
   lib32stdc++6 \
   lib32gcc-s1 \
