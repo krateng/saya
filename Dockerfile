@@ -41,11 +41,7 @@ RUN apt update && apt install -y --no-install-recommends --no-install-suggests \
   nano \
   curl \
   locales \
-  xdg-user-dirs \
-  python3 \
-  python3-pip \
-  socat
-RUN pip install toml
+  xdg-user-dirs
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
   && dpkg-reconfigure --frontend=noninteractive locales
 

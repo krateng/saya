@@ -41,6 +41,8 @@ fn main() {
     println!();
     present_issues(&issues, true);
 
+    println!("Ready! Waiting for the first player to connect...");
+
     let listen_addr = SocketAddrV6::new(Ipv6Addr::UNSPECIFIED, 8211, 0, 0);
     let forward_addr = SocketAddrV4::new(Ipv4Addr::LOCALHOST, internal_port);
 
